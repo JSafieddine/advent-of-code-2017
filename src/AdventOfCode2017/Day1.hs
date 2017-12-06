@@ -12,8 +12,9 @@ readCaptcha input = let captcha = D.digits 10 input in
             else
                 (curr,summ)
 
-solutionDay1 :: IO Integer
-solutionDay1 = do
-    input <- readFile "Input/Day1.input" :: Integer
-    return . readCaptcha $ input
 
+getHalfwayItem :: [a] -> Int -> (a,a)
+getHalfwayItem list pos = undefined
+
+solutionDay1 :: IO Integer
+solutionDay1 = undefined
