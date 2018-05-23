@@ -12,10 +12,11 @@ next lz =
     else LZ.right lz
 
 maximum' :: (Eq a, Ord a) => Zipper a -> a
-maximum' zip = LZ.foldlz m (LZ.cursor zip) (LZ.start zip)
+maximum' zip = LZ.foldlz m (LZ.cursor slz) (slz)
     where m a z = if a < LZ.cursor z
                   then LZ.cursor z
                   else a
+          slz = LZ.start zip
 
 setCursorToMaximum :: (Eq a, Ord a) => Zipper a -> Zipper a
 setCursorToMaximum zip = setCursorToMaximum' z
@@ -32,13 +33,9 @@ redistribute zip = iterate' d (next . addOne) z'
           d = LZ.cursor z
           z' = next $ LZ.replace 0 z
 
-
-
 addOne :: (Num a) => Zipper a -> Zipper a
-addOne zip = LZ.replace (LZ.cursor zip + 1)  zip
+addOne zip = case LZ.safeCursor zip of
+    (Just n) -> LZ.replace (n+1) zip
+    Nothing -> addOne . next $ zip
 
-iterate' :: Int -> (Zipper Int -> Zipper Int) -> Zipper Int ->  Zipper Int
-iterate' n f z
-    | n > 0  = iterate' (n - 1) f (f z)
-    | n == 0 = z
-    | otherwise = undefined
+solve :: [Int] -> Int
